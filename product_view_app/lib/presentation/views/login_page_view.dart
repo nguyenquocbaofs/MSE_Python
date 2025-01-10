@@ -16,7 +16,7 @@ class _LoginPageViewState extends State<LoginPageView> {
     double sizeWidth = MediaQuery.sizeOf(context).width / 2;
 
     void onLogin({required String username, required String password}) {
-      print(username + " ---------- " + password);
+      print(username + " --------s-- " + password);
     }
 
     return Scaffold(
