@@ -169,3 +169,23 @@ cython_debug/
 
 # PyPI configuration file
 .pypirc
+
+
+# Flutter specific
+.flutter-plugins
+.flutter-plugins-dependencies
+.packages
+.pub-cache/
+build/
+
+# Android specific
+.gradle/
+local.properties
+.idea/
+
+# iOS specific
+*.xcodeproj
+*.xcworkspace
+Pods/
+Flutter/Flutter.framework/
+Flutter/Flutter.podspec
