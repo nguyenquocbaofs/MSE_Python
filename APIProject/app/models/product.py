@@ -20,3 +20,15 @@ class Product(db.Model):
     comments = db.relationship('ProductComment', back_populates='product')
     views = db.relationship('ProductView', back_populates='product')
     statistics = db.relationship('ProductStatistic', uselist=False, back_populates='product')
+
+    def to_dict(self):
+        return {
+            "ProductID": self.ProductID,
+            "ProductName": self.ProductName,
+            "Description": self.Description,
+            "Price": float(self.Price),
+            "ImageUrl": self.ImageUrl,
+            "CreatedAt": self.CreatedAt.isoformat() if self.CreatedAt else None,
+            "UpdatedAt": self.UpdatedAt.isoformat() if self.UpdatedAt else None,
+            "DeletedAt": self.DeletedAt.isoformat() if self.DeletedAt else None,
+        }
