@@ -1,4 +1,5 @@
 import os
+from datetime import timedelta
 
 class Config:
     SECRET_KEY = os.environ.get('SECRET_KEY') or 'a_secret_key'
@@ -6,3 +7,4 @@ class Config:
         'mssql+pyodbc://qua52616_quangminhrt:yc%407%40f6kDtAKnv5l@112.78.2.73:1433/qua52616_TDB?driver=ODBC+Driver+17+for+SQL+Server'
     )
     SQLALCHEMY_TRACK_MODIFICATIONS = False
+    JWT_ACCESS_TOKEN_EXPIRES = timedelta(hours=1)

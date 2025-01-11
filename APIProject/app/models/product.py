@@ -31,4 +31,31 @@ class Product(db.Model):
             "CreatedAt": self.CreatedAt.isoformat() if self.CreatedAt else None,
             "UpdatedAt": self.UpdatedAt.isoformat() if self.UpdatedAt else None,
             "DeletedAt": self.DeletedAt.isoformat() if self.DeletedAt else None,
+            "Watchlist": [
+                {
+                    "UserID": watchlist_item.UserID 
+                } for watchlist_item in self.watchlist
+            ],
+            "Comments": [
+                {
+                    "CommentID": comment.CommentID,
+                    "UserID": comment.UserID,
+                    "CommentText": comment.CommentText,
+                    "RatingScore": comment.RatingScore,
+                    "CreatedAt": comment.CreatedAt.isoformat() if comment.CreatedAt else None
+                } for comment in self.comments
+            ],
+            "Views": [
+                {
+                    "ViewID": view.ViewID,
+                    "UserID": view.UserID,
+                    "ViewDate": view.ViewDate.isoformat() if view.ViewDate else None
+                } for view in self.views
+            ],
+            "Statistics": {
+                "TotalViews": self.statistics.TotalViews if self.statistics else 0,
+                "TotalComments": self.statistics.TotalComments if self.statistics else 0,
+                "TotalWatchlistAdds": self.statistics.TotalWatchlistAdds if self.statistics else 0,
+                "LastUpdated": self.statistics.LastUpdated.isoformat() if self.statistics and self.statistics.LastUpdated else None
+            } if self.statistics else None
         }
