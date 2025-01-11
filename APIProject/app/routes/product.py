@@ -10,7 +10,11 @@ bp = Blueprint('product', __name__, url_prefix='/api/product')
 @jwt_required()
 def get_products():
     # Get the current user's identity from the token
-    current_user = get_jwt_identity()
+    current_user = json.loads(get_jwt_identity())
+    print("Decoded Identity:", current_user)  # Debugging
+    user_id = int(current_user["user_id"])
+    is_admin = current_user["is_admin"]
+    print("user_id, is_admin: ", user_id, is_admin)  # Debugging
 
     # Check if the user is authorized
     if not current_user:
@@ -32,7 +36,7 @@ def get_products():
 @jwt_required()
 def get_product_by_id(product_id):
     # Get the current user's identity from the token
-    current_user = get_jwt_identity()
+    current_user = json.loads(get_jwt_identity())
     
     # Check if the user is authorized
     if not current_user:
