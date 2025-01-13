@@ -1,6 +1,6 @@
 from .. import db
 import json
-from sqlalchemy.sql import func
+from sqlalchemy.sql import func, and_
 from flask import Blueprint, jsonify, request, Response
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from ..models.userWatchlist import UserWatchlist
@@ -18,7 +18,10 @@ def get_watchlists():
         return jsonify({"error": "Unauthorized access"}), 401
 
     watchlist = UserWatchlist.query.filter(
-       UserWatchlist.UserID == current_user['user_id'] and UserWatchlist.RemovedAt == None
+        and_(
+            UserWatchlist.UserID == current_user['user_id'],
+            UserWatchlist.RemovedAt == None
+        )
     ).all()
 
     response = [item.to_dict() for item in watchlist]
@@ -28,7 +31,7 @@ def get_watchlists():
         mimetype='application/json'
     )
 
-@bp.route('<int:product_id>', methods=['POST'])
+@bp.route('/<int:product_id>', methods=['POST'])
 @jwt_required()
 def add_watchlists(product_id):
     # Get the current user's identity from the token
@@ -39,7 +42,11 @@ def add_watchlists(product_id):
         return jsonify({"error": "Unauthorized access"}), 401
 
     watchlist = UserWatchlist.query.filter(
-       UserWatchlist.UserID == current_user['user_id'] and UserWatchlist.ProductID == product_id and UserWatchlist.RemovedAt == None
+        and_(
+            UserWatchlist.UserID == current_user['user_id'],
+            UserWatchlist.ProductID == product_id,
+            UserWatchlist.RemovedAt == None
+        )
     ).all()
 
     if watchlist:
@@ -49,12 +56,12 @@ def add_watchlists(product_id):
         UserID=current_user['user_id'],
         ProductID=product_id
     )
-
-    response = [item.to_dict() for item in watchlist]
+    db.session.add(new_watchlist_item)
+    db.session.commit()
 
     return jsonify({"messsage": "Successfully added"}), 200 
 
-@bp.route('<int:watchlist_id>', methods=['DELETE'])
+@bp.route('/<int:watchlist_id>', methods=['DELETE'])
 @jwt_required()
 def remove_watchlists(watchlist_id):
     # Get the current user's identity from the token
@@ -65,8 +72,11 @@ def remove_watchlists(watchlist_id):
         return jsonify({"error": "Unauthorized access"}), 401
 
     watchlist = UserWatchlist.query.filter(
-       UserWatchlist.WatchlistID == watchlist_id and UserWatchlist.RemovedAt == None
-    ).all()
+        and_(
+            UserWatchlist.WatchlistID == watchlist_id,
+            UserWatchlist.RemovedAt == None
+        )
+    ).one()
 
     if not watchlist:
         return jsonify({"messsage": "Not found"}), 404 
