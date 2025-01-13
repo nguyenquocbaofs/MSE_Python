@@ -13,3 +13,11 @@ class UserWatchlist(db.Model):
     # Relationships
     user = db.relationship('User', back_populates='watchlist')
     product = db.relationship('Product', back_populates='watchlist')
+
+    def to_dict(self):
+        return {
+            "ProductID": self.ProductID,
+            "UserID": self.UserID,
+            "WatchlistID": self.WatchlistID,
+            "AddedAt": self.AddedAt.isoformat() if self.AddedAt else None
+        }
