@@ -5,6 +5,8 @@ from sqlalchemy import cast, Date
 from flask import Blueprint, jsonify, request, Response
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from ..models.product import Product
+from ..models.productComment import ProductComment
+from ..helpers.transfomersHelper import TransformersHelper
 
 bp = Blueprint('product', __name__, url_prefix='/api/product')
 
@@ -170,3 +172,41 @@ def delete_product(product_id):
     db.session.commit()
 
     return jsonify({"message": "Product successfully deleted."}), 200
+
+@bp.route('/<int:product_id>/comment', methods=['POST'])
+@jwt_required()
+def create_product_comment(product_id):
+    # Get the current user's identity from the token
+    current_user = json.loads(get_jwt_identity())
+
+    # Check if the user is an admin (for authorization purposes)
+    if not current_user or current_user.get('is_admin'):
+        return jsonify({"error": "Unauthorized access"}), 401
+
+    # Fetch the product by ID
+    product = Product.query.filter_by(ProductID=product_id).first()
+
+    # Check if the product exists
+    if not product:
+        return jsonify({"error": "Product not found"}), 404
+    
+    data = request.get_json()
+
+    # Validate the required fields
+    required_fields = ['Comment']
+    for field in required_fields:
+        if field not in data:
+            return jsonify({"error": f"Missing required field: {field}"}), 400
+
+    productComment = ProductComment(
+        ProductID=product_id,
+        UserID=current_user.get('user_id'),
+        CommentText=data['Comment'],
+        RatingScore=TransformersHelper.commentToScore(data['Comment'])
+    )
+
+    db.session.add(productComment)
+    # Commit the changes to the database
+    db.session.commit()
+
+    return jsonify({"message": "comment successfully added."}), 200
