@@ -6,6 +6,8 @@ from flask import Blueprint, jsonify, request, Response
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from ..models.product import Product
 from ..models.productComment import ProductComment
+from ..models.productView import ProductView
+from ..models.productStatistic import ProductStatistic
 from ..helpers.transfomersHelper import TransformersHelper
 
 bp = Blueprint('product', __name__, url_prefix='/api/product')
@@ -57,6 +59,27 @@ def get_product_by_id(product_id):
     # Check if the product exists
     if not product:
         return jsonify({"error": "Product not found"}), 404
+
+    new_product_view = ProductView(
+        ProductID = product.ProductID,
+        UserID = current_user.get('user_id')
+    )
+    # Add the product to the database and commit
+    db.session.add(new_product_view)
+    productStatistic = ProductStatistic.query.filter(
+        ProductStatistic.ProductID == product_id
+    ).first()
+
+    if not productStatistic:
+        new_product_statistic = ProductStatistic(
+            ProductID = product.ProductID,
+            TotalViews = 1
+        )
+        db.session.add(new_product_statistic)
+    else:
+        productStatistic.TotalViews += 1
+
+    db.session.commit()
 
     # Convert the product object to a serializable format
     product_data = product.to_dict()
@@ -206,6 +229,21 @@ def create_product_comment(product_id):
     )
 
     db.session.add(productComment)
+
+    productStatistic = ProductStatistic.query.filter(
+        ProductStatistic.ProductID == product_id
+    ).first()
+
+    if not productStatistic:
+        new_product_statistic = ProductStatistic(
+            ProductID = product.ProductID,
+            TotalComments = 1
+        )
+        db.session.add(new_product_statistic)
+    else:
+        productStatistic.TotalComments += 1
+
+    db.session.commit()
     # Commit the changes to the database
     db.session.commit()
 

@@ -4,6 +4,7 @@ from sqlalchemy.sql import func, and_
 from flask import Blueprint, jsonify, request, Response
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from ..models.userWatchlist import UserWatchlist
+from ..models.productStatistic import ProductStatistic
 
 bp = Blueprint('watchlist', __name__, url_prefix='/api/watchlist')
 
@@ -57,6 +58,20 @@ def add_watchlists(product_id):
         ProductID=product_id
     )
     db.session.add(new_watchlist_item)
+
+    productStatistic = ProductStatistic.query.filter(
+        ProductStatistic.ProductID == product_id
+    ).first()
+
+    if not productStatistic:
+        new_product_statistic = ProductStatistic(
+            ProductID = product_id,
+            TotalWatchlistAdds = 1
+        )
+        db.session.add(new_product_statistic)
+    else:
+        productStatistic.TotalWatchlistAdds += 1
+
     db.session.commit()
 
     return jsonify({"messsage": "Successfully added"}), 200 
