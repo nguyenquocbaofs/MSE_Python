@@ -4,7 +4,10 @@ CREATE TABLE Users (
     PasswordHash NVARCHAR(255) NOT NULL,
     Email NVARCHAR(255) NOT NULL,
     IsAdmin BIT DEFAULT 0,
-    CreatedAt DATETIME DEFAULT GETDATE()
+    CreatedAt DATETIME DEFAULT GETDATE(),
+    [Mobile] [nvarchar](15) NULL,
+    [Address] [nvarchar](255) NULL,
+    [Gender] [nvarchar](10) NULL
 );
 
 CREATE TABLE Products (
