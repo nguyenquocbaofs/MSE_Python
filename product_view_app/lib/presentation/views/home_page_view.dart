@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'package:http/http.dart' as http;
 import 'package:product_view_app/presentation/controller/login_controller.dart';
 import 'package:product_view_app/presentation/controller/product_controller.dart';
 import 'package:product_view_app/presentation/model/product_model.dart';
@@ -33,28 +34,18 @@ class _HomePageViewState extends State<HomePageView> {
 
   @override
   Widget build(BuildContext context) {
-    loadImage(String url) {
-      return Image.network(
-        url,
-        fit: BoxFit.cover,
-        loadingBuilder: (context, child, loadingProgress) {
-          if (loadingProgress == null) {
-            return child;
-          } else {
-            return Center(
-              child: CircularProgressIndicator(
-                value: loadingProgress.expectedTotalBytes != null
-                    ? loadingProgress.cumulativeBytesLoaded /
-                        (loadingProgress.expectedTotalBytes ?? 1)
-                    : null,
-              ),
-            );
-          }
-        },
-        errorBuilder: (context, error, stackTrace) {
-          return Image.asset('assets/placeholder.png');
-        },
-      );
+    Future<bool> checkImageUrl(String url) async {
+      try {
+        final response = await http.get(Uri.parse(url));
+
+        if (response.statusCode == 200) {
+          return true;
+        } else {
+          return false;
+        }
+      } catch (e) {
+        return false;
+      }
     }
 
     Widget buildBestProduct() {
@@ -95,7 +86,23 @@ class _HomePageViewState extends State<HomePageView> {
                 Container(
                   alignment: Alignment.topCenter,
                   margin: const EdgeInsets.only(top: 5.0, bottom: 5.0),
-                  child: loadImage(product.imageUrl),
+                  child: FutureBuilder<bool>(
+                    future: checkImageUrl(product.imageUrl),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const Center(
+                            child: CircularProgressIndicator(
+                          color: Colors.blue,
+                        ));
+                      } else if (snapshot.hasError ||
+                          !snapshot.hasData ||
+                          !snapshot.data!) {
+                        return Image.asset('assets/placeholder.png');
+                      } else {
+                        return Image.network(product.imageUrl);
+                      }
+                    },
+                  ),
                 ),
                 subText(product.productName),
                 RichText(
@@ -209,10 +216,27 @@ class _HomePageViewState extends State<HomePageView> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   SizedBox(
-                    height: 80,
-                    width: 80,
-                    child: loadImage(product.imageUrl),
-                  ),
+                      height: 80,
+                      width: 80,
+                      child: FutureBuilder<bool>(
+                        future: checkImageUrl(product.imageUrl),
+                        builder: (context, snapshot) {
+                          if (snapshot.connectionState ==
+                              ConnectionState.waiting) {
+                            return const Center(
+                              child: CircularProgressIndicator(
+                                color: Colors.blue,
+                              ),
+                            );
+                          } else if (snapshot.hasError ||
+                              !snapshot.hasData ||
+                              !snapshot.data!) {
+                            return Image.asset('assets/placeholder.png');
+                          } else {
+                            return Image.network(product.imageUrl);
+                          }
+                        },
+                      )),
                   Padding(
                     padding: const EdgeInsets.all(5.0),
                     child: Column(
