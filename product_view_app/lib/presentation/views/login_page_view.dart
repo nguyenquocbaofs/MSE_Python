@@ -31,7 +31,7 @@ class _LoginPageViewState extends State<LoginPageView> {
       if (username == "" || password == "") {
         return false;
       }
-      await loginController.login("baonq", "123456");
+      await loginController.login(username, password);
       if (loginController.modelData.status != 200) {
         return false;
       }
