@@ -12,6 +12,9 @@ def register():
     username = data.get('username')
     password = data.get('password')
     email = data.get('email')
+    mobile = data.get('mobile')
+    address = data.get('address')
+    gender = data.get('gender')
 
     if not username or not password or not email:
         return jsonify({"message": "All fields are required"}), 400
@@ -22,7 +25,7 @@ def register():
     if User.query.filter_by(Email=email).first():
         return jsonify({"message": "Email already registered"}), 400
 
-    user = User(Username=username, Email=email)
+    user = User(Username=username, Email=email, Mobile=mobile, Address=address, Gender=gender)
     user.set_password(password)
     db.session.add(user)
     db.session.commit()
@@ -49,3 +52,4 @@ def login():
         "access_token": access_token,
         "refresh_token": refresh_token
     }), 200
+

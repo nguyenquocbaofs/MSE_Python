@@ -16,9 +16,10 @@ def create_app():
     jwt.init_app(app)
 
     # Register blueprints
-    from .routes import auth, admin, product, watchlist
+    from .routes import auth, admin, product, watchlist, user
     app.register_blueprint(auth.bp)
     app.register_blueprint(admin.bp)
+    app.register_blueprint(user.bp)
     app.register_blueprint(watchlist.bp)
     app.register_blueprint(product.bp)
 
