@@ -13,9 +13,9 @@ class User(db.Model):
     Email = db.Column(db.String(255), nullable=False, unique=True)
     IsAdmin = db.Column(db.Boolean, default=False)
     CreatedAt = db.Column(db.DateTime, default=func.now())
-    Mobile = db.Column(db.String(15), nullable=False, unique=True)
-    Address = db.Column(db.String(255), nullable=False)
-    Gender = db.Column(db.String(10), nullable=False)
+    Mobile = db.Column(db.String(15), unique=True)
+    Address = db.Column(db.String(255))
+    Gender = db.Column(db.String(10))
 
     # Relationships
     watchlist = db.relationship('UserWatchlist', back_populates='user')
