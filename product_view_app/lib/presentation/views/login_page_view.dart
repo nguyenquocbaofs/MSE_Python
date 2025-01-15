@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 
+import 'package:product_view_app/presentation/controller/login_controller.dart';
+import 'package:product_view_app/presentation/views/admin_page_view.dart';
+import 'package:product_view_app/presentation/views/home_page_view.dart';
+
 class LoginPageView extends StatefulWidget {
   const LoginPageView({super.key});
 
@@ -10,13 +14,29 @@ class LoginPageView extends StatefulWidget {
 class _LoginPageViewState extends State<LoginPageView> {
   TextEditingController nameController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+  LoginController loginController = LoginController();
+  bool isActiveLoginFail = false;
+
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     double sizeWidth = MediaQuery.sizeOf(context).width / 2;
 
-    void onLogin({required String username, required String password}) {
-      print(username + " --------s-- " + password);
+    Future<bool> onLogin(
+        {required String username, required String password}) async {
+      if (username == "" || password == "") {
+        return false;
+      }
+      await loginController.login("baonq", "123456");
+      if (loginController.modelData.status != 200) {
+        return false;
+      }
+
+      return true;
     }
 
     return Scaffold(
@@ -89,9 +109,11 @@ class _LoginPageViewState extends State<LoginPageView> {
                 ),
                 Container(
                   padding: const EdgeInsets.symmetric(vertical: 25),
-                  child: const Text(
-                    "Username or password is incorrect!!!",
-                    style: TextStyle(
+                  child: Text(
+                    isActiveLoginFail
+                        ? "Username or password is incorrect!!!"
+                        : "",
+                    style: const TextStyle(
                         color: Colors.white, fontWeight: FontWeight.bold),
                   ),
                 ),
@@ -106,9 +128,33 @@ class _LoginPageViewState extends State<LoginPageView> {
                       'Login',
                       style: TextStyle(color: Colors.red),
                     ),
-                    onPressed: () => onLogin(
-                        password: passwordController.text,
-                        username: nameController.text),
+                    onPressed: () async {
+                      await onLogin(
+                              password: passwordController.text,
+                              username: nameController.text)
+                          .then(
+                        (isSuccess) => {
+                          if (isSuccess)
+                            {
+                              Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      loginController.modelData.isAdmin
+                                          ? const AdminPageView()
+                                          : const HomePageView(),
+                                ),
+                              )
+                            }
+                          else
+                            {
+                              setState(() {
+                                isActiveLoginFail = true;
+                              })
+                            }
+                        },
+                      );
+                    },
                   ),
                 ),
               ],
