@@ -13,7 +13,7 @@ class User(db.Model):
     Email = db.Column(db.String(255), nullable=False, unique=True)
     IsAdmin = db.Column(db.Boolean, default=False)
     CreatedAt = db.Column(db.DateTime, default=func.now())
-    Mobile = db.Column(db.String(15), unique=True)
+    Mobile = db.Column(db.String(15))
     Address = db.Column(db.String(255))
     Gender = db.Column(db.String(10))
 
