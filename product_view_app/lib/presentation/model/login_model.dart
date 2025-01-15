@@ -14,9 +14,18 @@ class LoginModel {
   });
 
   factory LoginModel.fromJson(Map<String, dynamic> json) {
+    String fixBase64Url(String input) {
+      int mod4 = input.length % 4;
+      if (mod4 > 0) {
+        input += '=' * (4 - mod4); // Thêm padding nếu thiếu
+      }
+      return input;
+    }
+
     var parts = json["access_token"].split('.');
     var payload = parts[1];
-    var decodedPayload = utf8.decode(base64Url.decode(payload));
+    String fixedPayload = fixBase64Url(payload);
+    var decodedPayload = utf8.decode(base64Url.decode(fixedPayload));
     var jsonPayload = jsonDecode(decodedPayload);
     int userId = -1;
     bool isAdmin = false;
