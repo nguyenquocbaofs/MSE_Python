@@ -63,8 +63,8 @@ class UserInfoController {
     });
     int contentLength = body.length;
     try {
-      final response = await http.post(
-        Uri.parse("$host/api/auth/login"),
+      final response = await http.put(
+        Uri.parse("$host/api/user/profile"),
         headers: <String, String>{
           'Authorization': 'Bearer $accessToken',
           'Content-Type': 'application/json; charset=UTF-8',
@@ -74,7 +74,7 @@ class UserInfoController {
       );
 
       if (response.statusCode == 200) {
-        await getUserInfo(accessToken);
+        modelData = UserInfoModel.fromJson(jsonDecode(response.body));
         return;
       } else {
         return;

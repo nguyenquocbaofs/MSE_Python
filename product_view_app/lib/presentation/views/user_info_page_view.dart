@@ -13,7 +13,8 @@ class _UserInfoPageViewState extends State<UserInfoPageView> {
   bool isEditState = false;
   TextEditingController mobileController = TextEditingController();
   TextEditingController addressController = TextEditingController();
-  String dropdownValue = "";
+  String drGenderValue = "";
+  bool isLoading = false;
 
   @override
   void initState() {
@@ -24,7 +25,7 @@ class _UserInfoPageViewState extends State<UserInfoPageView> {
   updateControllerInfo() {
     mobileController.text = UserInfoController().modelData.mobile;
     addressController.text = UserInfoController().modelData.address;
-    dropdownValue = UserInfoController().modelData.gender;
+    drGenderValue = UserInfoController().modelData.gender;
   }
 
   @override
@@ -83,7 +84,8 @@ class _UserInfoPageViewState extends State<UserInfoPageView> {
       }
 
       buildEdit() {
-        const List<String> list = <String>['Male', 'Female'];
+        const List<String> list = <String>['Male', 'Female', 'None'];
+
         buildDropdownField() {
           return Row(
             children: [
@@ -92,9 +94,9 @@ class _UserInfoPageViewState extends State<UserInfoPageView> {
                 child: Text("Gender: "),
               ),
               DropdownMenu<String>(
-                initialSelection: list.first,
+                initialSelection: drGenderValue == '' ? 'None' : drGenderValue,
                 onSelected: (String? value) {
-                  dropdownValue = value!;
+                  drGenderValue = value!;
                 },
                 dropdownMenuEntries: list.map<DropdownMenuEntry<String>>((String value) {
                   return DropdownMenuEntry<String>(value: value, label: value);
@@ -172,12 +174,14 @@ class _UserInfoPageViewState extends State<UserInfoPageView> {
                   width: 120.0,
                   child: ElevatedButton(
                     onPressed: () async {
+                      isLoading = true;
                       await UserInfoController()
                           .editUserInfo(LoginController().modelData.accessToken, mobileController.text,
-                              addressController.text, dropdownValue)
+                              addressController.text, drGenderValue)
                           .then(
                             (value) => setState(
                               () {
+                                isLoading = false;
                                 isEditState = false;
                               },
                             ),
@@ -213,9 +217,19 @@ class _UserInfoPageViewState extends State<UserInfoPageView> {
       ),
       backgroundColor: Colors.green.shade50,
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(24.0),
-          child: buildInfoContent(),
+        child: Stack(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(24.0),
+              child: buildInfoContent(),
+            ),
+            if (isLoading)
+              const Center(
+                child: CircularProgressIndicator(
+                  color: Colors.blue,
+                ),
+              )
+          ],
         ),
       ),
     );
