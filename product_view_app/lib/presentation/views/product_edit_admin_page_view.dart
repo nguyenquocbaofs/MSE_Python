@@ -177,6 +177,19 @@ class _ProductEditViewState extends State<ProductEditAdminPageView> {
                       },
                       child: const Text('Submit'),
                     ),
+                    const SizedBox(height: 16),
+                    ElevatedButton(
+                      onPressed: () async {
+                        Navigator.pushReplacement<void, void>(
+                          context,
+                          MaterialPageRoute<void>(
+                            builder: (BuildContext context) =>
+                                const ProductListAdminPageView(),
+                          ),
+                        );
+                      },
+                      child: const Text('Back'),
+                    ),
                   ],
                 ),
               ),

@@ -168,7 +168,7 @@ class _ProductListViewState extends State<ProductListAdminPageView> {
                                   ),
                                   DataCell(
                                     SizedBox(
-                                        width: 280,
+                                        width: 200,
                                         child: Text(
                                           product.description,
                                           maxLines: 1,
