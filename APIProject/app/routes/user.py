@@ -50,11 +50,13 @@ def update_profile():
     if 'Address' in data:
         user.Address = data['Address']
     if 'Gender' in data:
-        user.Description = data['Gender']
+        user.Gender = data['Gender']
+    if 'Mobile' in data:
+        user.Mobile = data['Mobile']
 
     db.session.commit()
-
+    user_response = user.to_dict()
     return Response(
-        json.dumps(user, indent=4, sort_keys=False),  # Prevent sorting of keys by alphabet
+        json.dumps(user_response, indent=4, sort_keys=False),  # Prevent sorting of keys by alphabet
         mimetype='application/json'
     )
