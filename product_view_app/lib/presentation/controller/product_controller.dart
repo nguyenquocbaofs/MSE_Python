@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
+import 'package:product_view_app/constraint/constaint.dart';
 import 'package:product_view_app/presentation/model/product_model.dart';
 
 class ProductController {
@@ -17,7 +18,7 @@ class ProductController {
   Future<void> getProducts(String accessToken) async {
     try {
       final response = await http.get(
-        Uri.parse("http://103.45.234.81:5000/api/product"),
+        Uri.parse("$host/api/product"),
         headers: {
           'Authorization': 'Bearer $accessToken',
           'Content-Type': 'application/json',
@@ -44,7 +45,7 @@ class ProductController {
     int contentLength = body.length;
     try {
       final response = await http.post(
-        Uri.parse("http://103.45.234.81:5000/api/product/$productId/comment"),
+        Uri.parse("$host/api/product/$productId/comment"),
         headers: {
           'Authorization': 'Bearer $accessToken',
           'Content-Type': 'application/json; charset=UTF-8',

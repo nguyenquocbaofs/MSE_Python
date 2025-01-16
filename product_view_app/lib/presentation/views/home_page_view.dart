@@ -5,6 +5,7 @@ import 'package:product_view_app/presentation/controller/login_controller.dart';
 import 'package:product_view_app/presentation/controller/product_controller.dart';
 import 'package:product_view_app/presentation/model/product_model.dart';
 import 'package:product_view_app/presentation/views/detail_page_view.dart';
+import 'package:product_view_app/presentation/views/user_info_page_view.dart';
 
 class HomePageView extends StatefulWidget {
   const HomePageView({super.key});
@@ -276,6 +277,19 @@ class _HomePageViewState extends State<HomePageView> {
     return Scaffold(
       backgroundColor: Colors.green.shade50,
       appBar: AppBar(
+        leading: IconButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const UserInfoPageView(),
+                ),
+              );
+            },
+            icon: const Icon(
+              Icons.info_outline,
+              color: Colors.white,
+            )),
         title: const Text(
           "Product Views",
           style: TextStyle(color: Colors.white),

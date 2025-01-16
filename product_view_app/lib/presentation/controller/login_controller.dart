@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
+import 'package:product_view_app/constraint/constaint.dart';
 import 'package:product_view_app/presentation/model/login_model.dart';
 
 class LoginController {
@@ -27,7 +28,7 @@ class LoginController {
     int contentLength = body.length;
     try {
       final response = await http.post(
-        Uri.parse("http://103.45.234.81:5000/api/auth/login"),
+        Uri.parse("$host/api/auth/login"),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
           'Content-Length': contentLength.toString(),
