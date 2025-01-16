@@ -4,6 +4,7 @@ import 'package:product_view_app/presentation/controller/login_controller.dart';
 import 'package:product_view_app/presentation/controller/product_controller.dart';
 import 'package:product_view_app/presentation/model/product_model.dart';
 import 'package:product_view_app/presentation/views/product_add_admin_page_view.dart';
+import 'package:product_view_app/presentation/views/product_edit_admin_page_view.dart';
 
 class ProductListAdminPageView extends StatefulWidget {
   const ProductListAdminPageView({super.key});
@@ -32,6 +33,13 @@ class _ProductListViewState extends State<ProductListAdminPageView> {
     } catch (e) {
       return false;
     }
+  }
+
+  Future<bool> onSubmit({required int productId}) async {
+    await productController.deleteProduct(
+        LoginController().modelData.accessToken, productId);
+
+    return true;
   }
 
   @override
@@ -187,7 +195,16 @@ class _ProductListViewState extends State<ProductListAdminPageView> {
                                       ElevatedButton(
                                         style: ElevatedButton.styleFrom(
                                             backgroundColor: Colors.blue),
-                                        onPressed: () {},
+                                        onPressed: () {
+                                          Navigator.pushReplacement<void, void>(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) =>
+                                                  ProductEditAdminPageView(
+                                                      productModel: product),
+                                            ),
+                                          );
+                                        },
                                         child: const Text(
                                           "Edit",
                                           style: TextStyle(color: Colors.white),
@@ -197,7 +214,9 @@ class _ProductListViewState extends State<ProductListAdminPageView> {
                                       ElevatedButton(
                                         style: ElevatedButton.styleFrom(
                                             backgroundColor: Colors.red),
-                                        onPressed: () {},
+                                        onPressed: () {
+                                          _showMyDialog(product);
+                                        },
                                         child: const Text(
                                           "Delete",
                                           style: TextStyle(color: Colors.white),
@@ -219,6 +238,59 @@ class _ProductListViewState extends State<ProductListAdminPageView> {
           ),
         ],
       ),
+    );
+  }
+
+  Future<void> _showMyDialog(ProductModel productModel) async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Delete'),
+          content: const SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text('Do you want to delete this product?'),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
+              onPressed: () async {
+                await onSubmit(
+                  productId: productModel.productId,
+                );
+
+                if (context.mounted) {
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const ProductListAdminPageView(),
+                    ),
+                  );
+                }
+              },
+              child: const Text(
+                "Delete",
+                style: TextStyle(color: Colors.white),
+              ),
+            ),
+            const SizedBox(width: 10),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(backgroundColor: Colors.blue),
+              onPressed: () async {
+                Navigator.of(context).pop();
+              },
+              child: const Text(
+                "Cancel",
+                style: TextStyle(color: Colors.white),
+              ),
+            ),
+          ],
+        );
+      },
     );
   }
 }

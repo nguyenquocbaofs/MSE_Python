@@ -92,4 +92,60 @@ class ProductController {
       return false;
     }
   }
+
+  Future<bool> editProduct(
+      String accessToken,
+      int productId,
+      String productName,
+      double price,
+      String description,
+      String imageUrl) async {
+    String body = jsonEncode({
+      "ProductName": productName,
+      "Price": price,
+      "Description": description,
+      "ImageUrl": imageUrl,
+    });
+    int contentLength = body.length;
+    try {
+      final response = await http.put(
+        Uri.parse("$host/api/product/$productId"),
+        headers: {
+          'Authorization': 'Bearer $accessToken',
+          'Content-Type': 'application/json; charset=UTF-8',
+          'Content-Length': contentLength.toString(),
+        },
+        body: body,
+      );
+      if (response.statusCode == 200) {
+        return true;
+      } else {
+        return false;
+      }
+    } catch (e) {
+      return false;
+    }
+  }
+
+  Future<bool> deleteProduct(
+    String accessToken,
+    int productId,
+  ) async {
+    try {
+      final response = await http.delete(
+        Uri.parse("$host/api/product/$productId"),
+        headers: {
+          'Authorization': 'Bearer $accessToken',
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+      );
+      if (response.statusCode == 200) {
+        return true;
+      } else {
+        return false;
+      }
+    } catch (e) {
+      return false;
+    }
+  }
 }

@@ -134,24 +134,26 @@ class _ProductAddViewState extends State<ProductAddAdminPageView> {
                     ),
                     const SizedBox(height: 16),
                     ElevatedButton(
-                      onPressed: () {
+                      onPressed: () async {
                         if (_formKey.currentState!.validate()) {
                           // If the form is valid, collect data
 
                           // Handle the collected data
-                          onSubmit(
+                          await onSubmit(
                               productName: productNameController.text,
                               price: double.parse(priceController.text),
                               description: descriptionController.text,
                               imageUrl: imageUrlController.text);
 
-                          Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) =>
-                                  const ProductListAdminPageView(),
-                            ),
-                          );
+                          if (context.mounted) {
+                            Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    const ProductListAdminPageView(),
+                              ),
+                            );
+                          }
                         }
                       },
                       child: const Text('Submit'),
