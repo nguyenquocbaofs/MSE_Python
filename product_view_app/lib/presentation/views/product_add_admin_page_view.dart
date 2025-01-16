@@ -47,7 +47,7 @@ class _ProductAddViewState extends State<ProductAddAdminPageView> {
     }
 
     return AdminMenu(
-      index: 0,
+      index: 1,
       content: Column(
         children: [
           const SizedBox(height: 20),
