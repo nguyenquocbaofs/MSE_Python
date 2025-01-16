@@ -63,4 +63,33 @@ class ProductController {
       return false;
     }
   }
+
+  Future<bool> addProduct(String accessToken, String productName, double price,
+      String description, String imageUrl) async {
+    String body = jsonEncode({
+      "ProductName": productName,
+      "Price": price,
+      "Description": description,
+      "ImageUrl": imageUrl,
+    });
+    int contentLength = body.length;
+    try {
+      final response = await http.post(
+        Uri.parse("$host/api/product"),
+        headers: {
+          'Authorization': 'Bearer $accessToken',
+          'Content-Type': 'application/json; charset=UTF-8',
+          'Content-Length': contentLength.toString(),
+        },
+        body: body,
+      );
+      if (response.statusCode == 200) {
+        return true;
+      } else {
+        return false;
+      }
+    } catch (e) {
+      return false;
+    }
+  }
 }

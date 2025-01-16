@@ -1,31 +1,32 @@
 import 'package:flutter/material.dart';
 import 'package:product_view_app/presentation/views/product_list_admin_page_view.dart';
 
-class AdminPageView extends StatefulWidget {
-  const AdminPageView({super.key});
+class AdminMenu extends StatefulWidget {
+  final int index;
+  final Widget content;
+
+  const AdminMenu({
+    super.key,
+    required this.index,
+    required this.content,
+  });
 
   @override
-  State<AdminPageView> createState() => _AdminViewState();
+  State<AdminMenu> createState() => _AdminMenuState();
 }
 
-class _AdminViewState extends State<AdminPageView> {
-  int _selectedIndex = 1;
+class _AdminMenuState extends State<AdminMenu> {
+  int _selectedIndex = 0;
+  late Widget _content;
   @override
   void initState() {
     super.initState();
+    _selectedIndex = widget.index;
+    _content = widget.content;
   }
 
   @override
   Widget build(BuildContext context) {
-    Widget buildContent() {
-      if (_selectedIndex == 0) {
-        return const SizedBox(); // Danh sách người dùng
-      } else if (_selectedIndex == 1) {
-        return const ProductListAdminPageView(); // Danh sách sản phẩm
-      }
-      return const SizedBox();
-    }
-
     return Scaffold(
       body: Row(
         children: [
@@ -36,6 +37,23 @@ class _AdminViewState extends State<AdminPageView> {
             onDestinationSelected: (int index) {
               setState(() {
                 _selectedIndex = index;
+                if (_selectedIndex == 0) {
+                  // Navigator.pushReplacement<void, void>(
+                  //   context,
+                  //   MaterialPageRoute<void>(
+                  //     builder: (BuildContext context) => const SizedBox();
+                  //   ),
+                  // );
+                } else if (_selectedIndex == 1) {
+                  Navigator.pushReplacement<void, void>(
+                    context,
+                    MaterialPageRoute<void>(
+                      builder: (BuildContext context) =>
+                          const ProductListAdminPageView(),
+                    ),
+                  );
+                }
+                _content = const SizedBox();
               });
             },
             // leading: const Icon(Icons.admin_panel_settings, size: 40),
@@ -60,8 +78,8 @@ class _AdminViewState extends State<AdminPageView> {
           // Nội dung bên phải
           Expanded(
             child: Container(
-              color: Colors.grey[200],
-              child: buildContent(),
+              color: Colors.white,
+              child: _content,
             ),
           ),
         ],
