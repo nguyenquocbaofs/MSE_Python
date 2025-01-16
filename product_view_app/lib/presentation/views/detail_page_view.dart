@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import 'package:http/http.dart' as http;
 import 'package:product_view_app/presentation/controller/login_controller.dart';
 import 'package:product_view_app/presentation/controller/product_controller.dart';
@@ -43,6 +42,7 @@ class _DetailPageViewState extends State<DetailPageView> {
     }
 
     TextEditingController controller = TextEditingController();
+
     loadImage(String url) {
       return FutureBuilder<bool>(
         future: checkImageUrl(product.imageUrl),
@@ -52,9 +52,7 @@ class _DetailPageViewState extends State<DetailPageView> {
                 child: CircularProgressIndicator(
               color: Colors.blue,
             ));
-          } else if (snapshot.hasError ||
-              !snapshot.hasData ||
-              !snapshot.data!) {
+          } else if (snapshot.hasError || !snapshot.hasData || !snapshot.data!) {
             return Image.asset('assets/placeholder.png');
           } else {
             return Image.network(product.imageUrl);
@@ -95,11 +93,8 @@ class _DetailPageViewState extends State<DetailPageView> {
         return Row(
           children: [
             Text(
-              data.userId != dummyID
-                  ? "User Id ${data.userId} "
-                  : "Your comments",
-              style: TextStyle(
-                  color: data.userId != dummyID ? Colors.black : Colors.red),
+              data.userId != dummyID ? "User Id ${data.userId} " : "Your comments",
+              style: TextStyle(color: data.userId != dummyID ? Colors.black : Colors.red),
             ),
             const SizedBox(
               width: 12,
@@ -136,8 +131,8 @@ class _DetailPageViewState extends State<DetailPageView> {
       setState(() {
         isLoading = true;
       });
-      bool isSuccess = await ProductController().commentProduct(
-          LoginController().modelData.accessToken, product.productId, message);
+      bool isSuccess =
+          await ProductController().commentProduct(LoginController().modelData.accessToken, product.productId, message);
       if (isSuccess) {
         controller.text = "";
         for (var element in ProductController().listProducts) {
@@ -186,34 +181,32 @@ class _DetailPageViewState extends State<DetailPageView> {
                                   const SizedBox(
                                     height: 5,
                                   ),
-                                  loadImage(product.imageUrl),
+                                  SizedBox(
+                                    height: 300,
+                                    child: loadImage(product.imageUrl),
+                                  ),
                                   Text(
                                     product.productName,
-                                    style: const TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 20.0),
+                                    style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),
                                   ),
                                   Text(product.description),
                                   RichText(
                                     text: TextSpan(
                                       children: [
                                         TextSpan(
-                                          text:
-                                              'Price: ${product.price} dollar',
+                                          text: 'Price: ${product.price} dollar',
                                           style: const TextStyle(
                                             color: Colors.red,
                                           ),
                                         ),
                                         TextSpan(
-                                          text:
-                                              '   |   ${product.comments.length} comments',
+                                          text: '   |   ${product.comments.length} comments',
                                           style: const TextStyle(
                                             color: Colors.blue,
                                           ),
                                         ),
                                         TextSpan(
-                                          text:
-                                              '   |   ${product.views.length} views',
+                                          text: '   |   ${product.views.length} views',
                                           style: const TextStyle(
                                             color: Colors.red,
                                           ),

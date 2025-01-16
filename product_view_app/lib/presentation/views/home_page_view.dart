@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import 'package:http/http.dart' as http;
 import 'package:product_view_app/presentation/controller/login_controller.dart';
 import 'package:product_view_app/presentation/controller/product_controller.dart';
@@ -26,8 +25,7 @@ class _HomePageViewState extends State<HomePageView> {
   }
 
   loadData() async {
-    await productController
-        .getProducts(LoginController().modelData.accessToken);
+    await productController.getProducts(LoginController().modelData.accessToken);
     setState(() {
       listProducts = productController.listProducts;
     });
@@ -66,8 +64,7 @@ class _HomePageViewState extends State<HomePageView> {
             return Text(
               txtContent,
               softWrap: true,
-              style:
-                  const TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
+              style: const TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
               textAlign: TextAlign.center,
             );
           }
@@ -95,9 +92,7 @@ class _HomePageViewState extends State<HomePageView> {
                             child: CircularProgressIndicator(
                           color: Colors.blue,
                         ));
-                      } else if (snapshot.hasError ||
-                          !snapshot.hasData ||
-                          !snapshot.data!) {
+                      } else if (snapshot.hasError || !snapshot.hasData || !snapshot.data!) {
                         return Image.asset('assets/placeholder.png');
                       } else {
                         return Image.network(product.imageUrl);
@@ -222,16 +217,13 @@ class _HomePageViewState extends State<HomePageView> {
                       child: FutureBuilder<bool>(
                         future: checkImageUrl(product.imageUrl),
                         builder: (context, snapshot) {
-                          if (snapshot.connectionState ==
-                              ConnectionState.waiting) {
+                          if (snapshot.connectionState == ConnectionState.waiting) {
                             return const Center(
                               child: CircularProgressIndicator(
                                 color: Colors.blue,
                               ),
                             );
-                          } else if (snapshot.hasError ||
-                              !snapshot.hasData ||
-                              !snapshot.data!) {
+                          } else if (snapshot.hasError || !snapshot.hasData || !snapshot.data!) {
                             return Image.asset('assets/placeholder.png');
                           } else {
                             return Image.network(product.imageUrl);
@@ -311,8 +303,7 @@ class _HomePageViewState extends State<HomePageView> {
                           Container(
                             color: Colors.white,
                             width: double.infinity,
-                            padding:
-                                const EdgeInsets.only(top: 12.0, bottom: 12.0),
+                            padding: const EdgeInsets.only(top: 12.0, bottom: 12.0),
                             child: const Text(
                               "List Products",
                               textAlign: TextAlign.center,

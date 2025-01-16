@@ -17,7 +17,7 @@ class LoginModel {
     String fixBase64Url(String input) {
       int mod4 = input.length % 4;
       if (mod4 > 0) {
-        input += '=' * (4 - mod4); // Thêm padding nếu thiếu
+        input += '=' * (4 - mod4);
       }
       return input;
     }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:product_view_app/presentation/controller/login_controller.dart';
+import 'package:product_view_app/presentation/controller/user_info_controller.dart';
 import 'package:product_view_app/presentation/views/dashboad_admin_page_view.dart';
 import 'package:product_view_app/presentation/views/home_page_view.dart';
 
@@ -14,7 +15,9 @@ class _LoginPageViewState extends State<LoginPageView> {
   TextEditingController nameController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   LoginController loginController = LoginController();
+  UserInfoController userController = UserInfoController();
   bool isActiveLoginFail = false;
+  bool isLoginState = false;
 
   @override
   void initState() {
@@ -25,8 +28,7 @@ class _LoginPageViewState extends State<LoginPageView> {
   Widget build(BuildContext context) {
     double sizeWidth = MediaQuery.sizeOf(context).width / 2;
 
-    Future<bool> onLogin(
-        {required String username, required String password}) async {
+    Future<bool> onLogin({required String username, required String password}) async {
       if (username == "" || password == "") {
         return false;
       }
@@ -34,7 +36,7 @@ class _LoginPageViewState extends State<LoginPageView> {
       if (loginController.modelData.status != 200) {
         return false;
       }
-
+      await userController.getUserInfo(loginController.modelData.accessToken);
       return true;
     }
 
@@ -95,8 +97,7 @@ class _LoginPageViewState extends State<LoginPageView> {
                     decoration: const InputDecoration(
                       filled: true,
                       fillColor: Colors.white,
-                      prefixIcon: Icon(Icons.verified_user_outlined,
-                          color: Colors.black),
+                      prefixIcon: Icon(Icons.verified_user_outlined, color: Colors.black),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.all(
                           Radius.circular(14),
@@ -109,11 +110,8 @@ class _LoginPageViewState extends State<LoginPageView> {
                 Container(
                   padding: const EdgeInsets.symmetric(vertical: 25),
                   child: Text(
-                    isActiveLoginFail
-                        ? "Username or password is incorrect!!!"
-                        : "",
-                    style: const TextStyle(
-                        color: Colors.white, fontWeight: FontWeight.bold),
+                    isActiveLoginFail ? "Username or password is incorrect!!!" : "",
+                    style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
                   ),
                 ),
                 SizedBox(
@@ -128,22 +126,23 @@ class _LoginPageViewState extends State<LoginPageView> {
                       style: TextStyle(color: Colors.red),
                     ),
                     onPressed: () async {
-                      await onLogin(
-                              password: passwordController.text,
-                              username: nameController.text)
-                          .then(
+                      if (isLoginState) {
+                        return;
+                      }
+                      isLoginState = true;
+                      await onLogin(password: passwordController.text, username: nameController.text).then(
                         (isSuccess) => {
+                          isLoginState = false,
                           if (isSuccess)
                             {
                               Navigator.pushReplacement(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) =>
-                                      loginController.modelData.isAdmin
-                                          ? const DashBoadAdminPageView()
-                                          : const HomePageView(),
+                                  builder: (context) => loginController.modelData.isAdmin
+                                      ? const DashBoadAdminPageView()
+                                      : const HomePageView(),
                                 ),
-                              )
+                              ),
                             }
                           else
                             {
