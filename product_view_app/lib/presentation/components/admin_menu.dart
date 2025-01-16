@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:product_view_app/presentation/views/dashboad_admin_page_view.dart';
 import 'package:product_view_app/presentation/views/product_list_admin_page_view.dart';
 
 class AdminMenu extends StatefulWidget {
@@ -38,12 +39,13 @@ class _AdminMenuState extends State<AdminMenu> {
               setState(() {
                 _selectedIndex = index;
                 if (_selectedIndex == 0) {
-                  // Navigator.pushReplacement<void, void>(
-                  //   context,
-                  //   MaterialPageRoute<void>(
-                  //     builder: (BuildContext context) => const SizedBox();
-                  //   ),
-                  // );
+                  Navigator.pushReplacement<void, void>(
+                    context,
+                    MaterialPageRoute<void>(
+                      builder: (BuildContext context) =>
+                          const DashBoadAdminPageView(),
+                    ),
+                  );
                 } else if (_selectedIndex == 1) {
                   Navigator.pushReplacement<void, void>(
                     context,
@@ -66,7 +68,7 @@ class _AdminMenuState extends State<AdminMenu> {
             destinations: const [
               NavigationRailDestination(
                 icon: Icon(Icons.people),
-                label: Text('User'),
+                label: Text('Dashboard'),
               ),
               NavigationRailDestination(
                 icon: Icon(Icons.shopping_cart),

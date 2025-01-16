@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:product_view_app/presentation/controller/login_controller.dart';
+import 'package:product_view_app/presentation/views/dashboad_admin_page_view.dart';
 import 'package:product_view_app/presentation/views/home_page_view.dart';
 import 'package:product_view_app/presentation/views/product_list_admin_page_view.dart';
 
@@ -27,10 +28,10 @@ class _LoginPageViewState extends State<LoginPageView> {
 
     Future<bool> onLogin(
         {required String username, required String password}) async {
-      // if (username == "" || password == "") {
-      //   return false;
-      // }
-      await loginController.login("admin", "123456");
+      if (username == "" || password == "") {
+        return false;
+      }
+      await loginController.login(username, password);
       if (loginController.modelData.status != 200) {
         return false;
       }
@@ -140,7 +141,7 @@ class _LoginPageViewState extends State<LoginPageView> {
                                 MaterialPageRoute(
                                   builder: (context) =>
                                       loginController.modelData.isAdmin
-                                          ? const ProductListAdminPageView()
+                                          ? const DashBoadAdminPageView()
                                           : const HomePageView(),
                                 ),
                               )
