@@ -7,6 +7,7 @@ class ProductStatistic(db.Model):
     __table_args__ = {'schema': 'qua52616_quangminhrt'}
     StatisticID = db.Column(db.Integer, primary_key=True)
     ProductID = db.Column(db.Integer, db.ForeignKey('qua52616_quangminhrt.Products.ProductID'), nullable=False)
+    AvgRatingScore= db.Column(db.Numeric(precision=10, scale=2), default=0)
     TotalViews = db.Column(db.Integer, default=0)
     TotalComments = db.Column(db.Integer, default=0)
     TotalWatchlistAdds = db.Column(db.Integer, default=0)

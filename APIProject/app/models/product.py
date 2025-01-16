@@ -56,6 +56,7 @@ class Product(db.Model):
                 "TotalViews": self.statistics.TotalViews if self.statistics else 0,
                 "TotalComments": self.statistics.TotalComments if self.statistics else 0,
                 "TotalWatchlistAdds": self.statistics.TotalWatchlistAdds if self.statistics else 0,
+                "AvgRatingScore": float(self.statistics.AvgRatingScore) if self.statistics.AvgRatingScore is not None else 0.0,
                 "LastUpdated": self.statistics.LastUpdated.isoformat() if self.statistics and self.statistics.LastUpdated else None
             } if self.statistics else None
         }

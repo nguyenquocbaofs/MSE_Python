@@ -220,12 +220,19 @@ def create_product_comment(product_id):
     for field in required_fields:
         if field not in data:
             return jsonify({"error": f"Missing required field: {field}"}), 400
+        
+    score = 3
+
+    try:
+        score = TransformersHelper.commentToScore(data['Comment'])
+    except:
+        print('score could not be calculated')
 
     productComment = ProductComment(
         ProductID=product_id,
         UserID=current_user.get('user_id'),
         CommentText=data['Comment'],
-        RatingScore=TransformersHelper.commentToScore(data['Comment'])
+        RatingScore=score
     )
 
     db.session.add(productComment)
@@ -237,13 +244,20 @@ def create_product_comment(product_id):
     if not productStatistic:
         new_product_statistic = ProductStatistic(
             ProductID = product.ProductID,
-            TotalComments = 1
+            TotalComments = 1,
+            AvgRatingScore = score
         )
         db.session.add(new_product_statistic)
     else:
-        productStatistic.TotalComments += 1
+        total = score
+        totalComment = 1
+        for comment in product.comments:
+            total += comment.RatingScore if comment.RatingScore else 0
+            totalComment += 1
 
-    db.session.commit()
+        productStatistic.AvgRatingScore = total/totalComment
+        productStatistic.TotalComments = totalComment
+        
     # Commit the changes to the database
     db.session.commit()
 
