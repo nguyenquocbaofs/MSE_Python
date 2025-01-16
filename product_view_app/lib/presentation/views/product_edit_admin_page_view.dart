@@ -179,7 +179,7 @@ class _ProductEditViewState extends State<ProductEditAdminPageView> {
                     ),
                     const SizedBox(height: 16),
                     ElevatedButton(
-                      onPressed: () async {
+                      onPressed: () {
                         Navigator.pushReplacement<void, void>(
                           context,
                           MaterialPageRoute<void>(
