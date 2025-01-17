@@ -1,0 +1,35 @@
+{
+    "dart.lineLength": 120,
+    "files.exclude": {
+        "build": true,
+        "**/*.config.dart": true,
+        "**/*.mocks.dart": true,
+        "**/pubspec.lock": false,
+        "**/*.gen.dart": true,
+        "**/*.gr.dart": true,
+        "**/*.g.dart": true,
+        "**/*.freezed.dart": true,
+    }, 
+    "debug.openDebug": "openOnDebugBreak",
+    "files.associations": {
+        "*.secret": "json"
+    },
+    "[dart]": {
+        "editor.codeActionsOnSave": [
+            "source.fixAll",
+            "source.organizeImports",
+        ],
+        "editor.formatOnSave": true,
+        "editor.formatOnType": true,
+        "editor.rulers": [
+            120
+        ],
+        "editor.selectionHighlight": false,
+        "editor.suggest.snippetsPreventQuickSuggestions": false,
+        "editor.suggestSelection": "first",
+        "editor.tabCompletion": "onlySnippets",
+        "editor.wordBasedSuggestions": "off",
+    },
+    "flutter-coverage.sufficientCoverageThreshold": 80,
+    "java.configuration.updateBuildConfiguration": "interactive",
+}
