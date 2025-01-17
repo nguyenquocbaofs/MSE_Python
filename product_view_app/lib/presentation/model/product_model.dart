@@ -30,9 +30,7 @@ class ProductModel {
   });
 
   factory ProductModel.fromJson(Map<String, dynamic> json) {
-    List<Comment> comments = (json['Comments'] as List)
-        .map((item) => Comment.fromJson(item))
-        .toList();
+    List<Comment> comments = (json['Comments'] as List).map((item) => Comment.fromJson(item)).toList();
     List<int> scoreList = [];
     for (var data in comments) {
       scoreList.add(data.ratingScore);
@@ -55,14 +53,10 @@ class ProductModel {
       imageUrl: json['ImageUrl'] ?? '',
       createdAt: DateTime.parse(json['CreatedAt'] ?? DateTime.now().toString()),
       updatedAt: DateTime.parse(json['UpdatedAt'] ?? DateTime.now().toString()),
-      deletedAt:
-          json['DeletedAt'] != null ? DateTime.parse(json['DeletedAt']) : null,
-      watchlist: (json['Watchlist'] as List)
-          .map((item) => Watchlist.fromJson(item))
-          .toList(),
+      deletedAt: json['DeletedAt'] != null ? DateTime.parse(json['DeletedAt']) : null,
+      watchlist: (json['Watchlist'] as List).map((item) => Watchlist.fromJson(item)).toList(),
       comments: comments,
-      views:
-          (json['Views'] as List).map((item) => View.fromJson(item)).toList(),
+      views: (json['Views'] as List).map((item) => View.fromJson(item)).toList(),
       statistics: Statistics.fromJson(json['Statistics'] ?? {}),
       scores: calculateStarRating(scoreList),
     );
@@ -131,12 +125,14 @@ class Statistics {
   final int totalViews;
   final int totalComments;
   final int totalWatchlistAdds;
+  final double avgRatingScore;
   final DateTime lastUpdated;
 
   Statistics({
     required this.totalViews,
     required this.totalComments,
     required this.totalWatchlistAdds,
+    required this.avgRatingScore,
     required this.lastUpdated,
   });
 
@@ -145,8 +141,8 @@ class Statistics {
       totalViews: json['TotalViews'] ?? 0,
       totalComments: json['TotalComments'] ?? 0,
       totalWatchlistAdds: json['TotalWatchlistAdds'] ?? 0,
-      lastUpdated:
-          DateTime.parse(json['LastUpdated'] ?? DateTime.now().toString()),
+      avgRatingScore: json['AvgRatingScore'] ?? 0,
+      lastUpdated: DateTime.parse(json['LastUpdated'] ?? DateTime.now().toString()),
     );
   }
 }

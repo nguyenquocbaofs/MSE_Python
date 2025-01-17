@@ -16,7 +16,6 @@ class DetailPageView extends StatefulWidget {
 }
 
 class _DetailPageViewState extends State<DetailPageView> {
-  int dummyID = 1;
   late ProductModel product;
   bool isLoading = false;
   @override
@@ -92,9 +91,24 @@ class _DetailPageViewState extends State<DetailPageView> {
       Widget buildItems(Comment data) {
         return Row(
           children: [
-            Text(
-              data.userId != dummyID ? "User Id ${data.userId} " : "Your comments",
-              style: TextStyle(color: data.userId != dummyID ? Colors.black : Colors.red),
+            RichText(
+              text: TextSpan(
+                children: [
+                  TextSpan(
+                    text:
+                        data.userId != LoginController().modelData.userId ? "User Id ${data.userId} " : "Your comments",
+                    style: TextStyle(
+                      color: data.userId != LoginController().modelData.userId ? Colors.black : Colors.red,
+                    ),
+                  ),
+                  TextSpan(
+                    text: "\nRating score: ${data.ratingScore}",
+                    style: const TextStyle(
+                      color: Colors.orange,
+                    ),
+                  ),
+                ],
+              ),
             ),
             const SizedBox(
               width: 12,
@@ -219,7 +233,7 @@ class _DetailPageViewState extends State<DetailPageView> {
                                     children: List.generate(
                                       5,
                                       (index) {
-                                        if (index < product.scores) {
+                                        if (index < product.statistics.avgRatingScore) {
                                           return const Icon(
                                             Icons.star,
                                             color: Colors.yellow,

@@ -50,7 +50,7 @@ class _HomePageViewState extends State<HomePageView> {
     Widget buildBestProduct() {
       List<ProductModel> sortScoresList = listProducts;
       sortScoresList.sort((a, b) {
-        if (a.scores == b.scores) {
+        if (a.statistics.avgRatingScore == b.statistics.avgRatingScore) {
           return b.comments.length.compareTo(a.comments.length);
         } else {
           return b.scores.compareTo(a.scores);
@@ -82,6 +82,7 @@ class _HomePageViewState extends State<HomePageView> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Container(
+                  height: 300,
                   alignment: Alignment.topCenter,
                   margin: const EdgeInsets.only(top: 5.0, bottom: 5.0),
                   child: FutureBuilder<bool>(
@@ -130,7 +131,7 @@ class _HomePageViewState extends State<HomePageView> {
                   children: List.generate(
                     5,
                     (index) {
-                      if (index < product.scores) {
+                      if (index < product.statistics.avgRatingScore) {
                         return const Icon(
                           Icons.star,
                           color: Colors.yellow,
