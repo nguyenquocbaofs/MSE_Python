@@ -17,11 +17,20 @@ class DetailPageView extends StatefulWidget {
 
 class _DetailPageViewState extends State<DetailPageView> {
   late ProductModel product;
+  ProductController productController = ProductController();
   bool isLoading = false;
   @override
   void initState() {
     super.initState();
     product = widget.productData;
+    loadData();
+  }
+
+  loadData() async {
+    await productController.getProductById(LoginController().modelData.accessToken, product.productId.toString());
+    // setState(() {
+    //   listProducts = productController.listProducts;
+    // });
   }
 
   @override

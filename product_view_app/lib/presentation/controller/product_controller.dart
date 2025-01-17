@@ -37,6 +37,27 @@ class ProductController {
     }
   }
 
+   Future<void> getProductById(String accessToken, String id) async {
+    try {
+      final response = await http.get(
+        Uri.parse("$host/api/product/$id"),
+        headers: {
+          'Authorization': 'Bearer $accessToken',
+          'Content-Type': 'application/json',
+        },
+      );
+      if (response.statusCode == 200) {
+        // dynamic jsonData = jsonDecode(response.body);
+        // ProductModel products =
+        //     jsonData.map((json) => ProductModel.fromJson(json)).toList();
+      } else {
+        listProducts = [];
+      }
+    } catch (e) {
+      listProducts = [];
+    }
+  }
+
   Future<bool> commentProduct(
       String accessToken, int productId, String comments) async {
     String body = jsonEncode({
