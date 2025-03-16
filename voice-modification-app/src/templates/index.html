@@ -18,6 +18,21 @@
             <h2>Play Converted Audio</h2>
             <audio id="audioPlayer" controls></audio>
         </div>
+        <form action="/record" method="post" enctype="multipart/form-data">
+            <!-- <label for="audio">Upload Audio:</label>
+            <input type="file" name="audio" id="audio" required> -->
+            <label for="pitch_shift">Pitch Shift:</label>
+            <input type="number" step="0.1" name="pitch_shift" id="pitch_shift">
+            <br/>
+            <label for="speed_change">Speed Change:</label>
+            <input type="number" step="0.1" name="speed_change" id="speed_change">
+            <br/>
+            <label for="volume_gain">Volume Gain:</label>
+            <input type="number" step="0.1" name="volume_gain" id="volume_gain">
+            <br/>
+            
+            <!-- <button type="submit">Submit</button> -->
+        </form>
     </div>
     <script src="{{ url_for('static', filename='js/scripts.js') }}"></script>
 </body>
