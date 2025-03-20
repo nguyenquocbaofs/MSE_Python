@@ -32,7 +32,16 @@ document.addEventListener('DOMContentLoaded', function() {
                 if (response.ok) {
                     const resultBlob = await response.blob();
                     const resultUrl = URL.createObjectURL(resultBlob);
-                    audioPlayer.src = resultUrl; // Update player with the processed audio
+                    audioPlayer.src = resultUrl;
+
+                    document.getElementById('original-waveform').src = "images/original_waveform.png";
+                    document.getElementById('original-spectrogram').src = "images/original_spectrogram.png";
+                    document.getElementById('pitch-shifted-waveform').src = "images/pitch_shifted_waveform.png";
+                    document.getElementById('pitch-shifted-spectrogram').src = "images/pitch_shifted_spectrogram.png";
+                    document.getElementById('speed-changed-waveform').src = "images/speed_changed_waveform.png";
+                    document.getElementById('speed-changed-spectrogram').src = "images/speed_changed_spectrogram.png";
+                    document.getElementById('volume-gained-waveform').src = "images/volume_gained_waveform.png";
+                    document.getElementById('volume-gained-spectrogram').src = "images/volume_gained_spectrogram.png";
                 } else {
                     console.error('Error uploading audio:', response.statusText);
                 }
@@ -49,6 +58,7 @@ document.addEventListener('DOMContentLoaded', function() {
     stopButton.addEventListener('click', () => {
         mediaRecorder.stop();
         recordButton.disabled = false;
+        stopButton.disabled = true;
         audioChunks = [];
     });
 });

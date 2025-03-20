@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, send_file
+from flask import Flask, render_template, request, send_file, send_from_directory
 import os
 from pydub import AudioSegment
 from voice_modification.modifier import VoiceModifier
@@ -42,6 +42,10 @@ def record():
     voice_modifier.modify_voice(wav_audio_path, output_audio_path, modification_parameters)
 
     return send_file(output_audio_path, as_attachment=True)
+
+@app.route('/images/<filename>')
+def images(filename):
+    return send_from_directory('images', filename)
 
 if __name__ == '__main__':
     app.run(debug=True)
